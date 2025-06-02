@@ -28,11 +28,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests (skipped for now)
-        run: echo "Skipping tests - no tests defined"
+      - name: Run tests (skipped)
+        run: echo "No tests defined, skipping..."
 
       - name: Lint (optional)
         run: npm run lint || echo "Lint failed"
 
-      - name: Build Docker image (optional)
+      - name: Build Docker image
         run: docker build -t cafeqr-backend .
