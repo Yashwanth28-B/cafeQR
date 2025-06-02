@@ -11,6 +11,10 @@ export default function CustomerMenu() {
 
   const API_BASE = process.env.REACT_APP_API_BASE;
 
+  fetch(`${API_BASE}/api/menu`)
+    .then((res) => res.json())
+    .then((data) => console.log(data));
+
   useEffect(() => {
     axios
       .get(`${API_BASE}/menu`)

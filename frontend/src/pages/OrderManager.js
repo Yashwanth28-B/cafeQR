@@ -7,6 +7,10 @@ export default function OrderManager() {
   const [order, setOrder] = useState(null);
   const API_BASE = process.env.REACT_APP_API_BASE;
 
+  fetch(`${API_BASE}/api/menu`)
+    .then((res) => res.json())
+    .then((data) => console.log(data));
+
   const fetchOrder = useCallback(() => {
     axios
       .get(`${API_BASE}/orders/${tableId}`)

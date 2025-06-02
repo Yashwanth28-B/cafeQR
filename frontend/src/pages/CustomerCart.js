@@ -11,6 +11,10 @@ export default function CustomerCart() {
 
   const API_BASE = process.env.REACT_APP_API_BASE;
 
+  fetch(`${API_BASE}/api/menu`)
+    .then((res) => res.json())
+    .then((data) => console.log(data));
+
   useEffect(() => {
     const storedCart = localStorage.getItem(`cart-${tableId}`);
     if (storedCart) setCart(JSON.parse(storedCart));

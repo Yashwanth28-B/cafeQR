@@ -14,6 +14,10 @@ export default function MenuEditor() {
 
   const API_BASE = process.env.REACT_APP_API_BASE;
 
+  fetch(`${API_BASE}/api/menu`)
+    .then((res) => res.json())
+    .then((data) => console.log(data));
+
   const fetchMenu = () =>
     axios.get(`${API_BASE}/menu`).then((res) => setMenu(res.data));
 
