@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cafeqr-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cafeqr-backend
+  template:
+    metadata:
+      labels:
+        app: cafeqr-backend
+    spec:
+      containers:
+        - name: cafeqr-backend
+          image: cafeqr-backend
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_URI
+              value: mongodb://cafeqr-mongo:27017/qrcafe
+            - name: JWT_SECRET
+              value: secretkey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cafeqr-backend
+spec:
+  selector:
+    app: cafeqr-backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
