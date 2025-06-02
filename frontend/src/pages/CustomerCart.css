@@ -1,0 +1,50 @@
+.cart-view {
+  padding: 2em;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #f0f4f8;
+}
+
+.cart-view h2 {
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.cart-item {
+  background: white;
+  margin: 1em 0;
+  padding: 1em;
+  border-left: 4px solid #007bff;
+  border-radius: 4px;
+}
+
+.cart-view p {
+  font-size: 16px;
+  margin: 0.5em 0;
+}
+
+.cart-view button {
+  margin: 0.7em 0.5em 0;
+  padding: 0.6em 1.2em;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.cart-view img {
+  display: block;
+  margin: 1em auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.receipt {
+  background: #e8ffe8;
+  padding: 1em;
+  border: 1px solid #ccc;
+  margin-top: 2em;
+  text-align: center;
+  border-radius: 6px;
+}

@@ -1,0 +1,30 @@
+.menu-editor {
+  padding: 2em;
+  font-family: sans-serif;
+}
+.menu-editor input {
+  display: block;
+  margin: 0.5em 0;
+  padding: 0.5em;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.menu-editor button {
+  padding: 10px;
+  margin-top: 10px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.menu-editor ul {
+  margin-top: 2em;
+}
+.menu-editor li {
+  background: #f8f8f8;
+  margin: 0.5em 0;
+  padding: 1em;
+  border-left: 4px solid #007bff;
+}

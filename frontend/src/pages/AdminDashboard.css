@@ -1,0 +1,17 @@
+.admin-dashboard {
+  padding: 2em;
+  font-family: Arial;
+}
+.admin-dashboard ul {
+  list-style: none;
+  padding: 0;
+}
+.admin-dashboard li {
+  background: #eef;
+  margin: 0.5em 0;
+  padding: 1em;
+  border-radius: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
