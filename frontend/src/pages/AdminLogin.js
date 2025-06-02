@@ -10,6 +10,10 @@ export default function AdminLogin({ setToken }) {
 
   const API_BASE = process.env.REACT_APP_API_BASE;
 
+  fetch(`${API_BASE}/api/menu`)
+    .then((res) => res.json())
+    .then((data) => console.log(data));
+
   const handleLogin = async () => {
     try {
       const res = await axios.post(`${API_BASE}/admin/login`, {
