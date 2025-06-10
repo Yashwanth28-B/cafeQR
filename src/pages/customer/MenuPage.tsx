@@ -347,6 +347,7 @@ const CustomerMenuPage = () => {
 
 export default CustomerMenuPage;
 */
+/*
 import React, { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -354,10 +355,14 @@ import { Badge } from "@/components/ui/badge";
 import { menuAPI, orderAPI } from "@/services/api";
 import { X } from "lucide-react";
 
+import { useParams } from "react-router-dom";
+
 const CustomerMenuPage = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [cart, setCart] = useState([]);
   const [showCart, setShowCart] = useState(false);
+
+  const { tableId } = useParams();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -402,20 +407,7 @@ const CustomerMenuPage = () => {
       )
     );
   };
-  /*
-  const placeOrder = async () => {
-    const orderItems = cart.map(({ _id, name, price, quantity }) => ({
-      itemId: _id,
-      name,
-      price,
-      quantity,
-    }));
-    await orderAPI.createOrder({ table: 1, items: orderItems });
-    setCart([]);
-    setShowCart(false);
-    alert("Order placed successfully!");
-  };
-*/
+  
 
   const handlePlaceOrder = async () => {
     if (cart.length === 0) {
@@ -434,6 +426,11 @@ const CustomerMenuPage = () => {
         })),
       };
 
+      console.log(
+        "Sending order payload:",
+        JSON.stringify(orderPayload, null, 2)
+      );
+
       const response = await orderAPI.createOrder(orderPayload);
       alert("Order placed successfully!");
       console.log("Order Response:", response.data);
@@ -441,10 +438,212 @@ const CustomerMenuPage = () => {
       setCart([]); // Clear cart
       setShowCart(false); // Hide cart
     } catch (error: any) {
-      console.error("Order Error:", error.response?.data || error.message);
+      console.error("Order Error:", error.response?.data);
       alert(
         "Failed to place order: " +
-          (error.response?.data?.message || error.message)
+          (error.response?.data?.message ||
+            error.response?.data?.errors?.[0]?.msg ||
+            error.message)
+      );
+    }
+  };
+
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  return (
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">Menu</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {menuItems.map((item) => (
+          <Card key={item._id} className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-4">
+              <div className="flex flex-col h-full justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h2 className="text-xl font-semibold">{item.name}</h2>
+                    <Badge variant="outline">{item.category}</Badge>
+                  </div>
+                  <p className="text-gray-600 mb-2">{item.description}</p>
+                  <p className="text-lg font-bold">₹{item.price.toFixed(2)}</p>
+                </div>
+                <Button className="mt-4" onClick={() => addToCart(item)}>
+                  Add to Cart
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+     
+      <Button
+        className="fixed bottom-6 right-6 rounded-full px-6 py-3 shadow-xl z-50"
+        onClick={() => setShowCart(true)}
+      >
+        View Cart ({cart.length})
+      </Button>
+
+      
+      {showCart && (
+        <div className="fixed top-0 right-0 w-full md:w-96 h-full bg-white shadow-lg p-6 z-50 overflow-y-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Your Cart</h2>
+            <Button variant="ghost" onClick={() => setShowCart(false)}>
+              <X className="w-6 h-6" />
+            </Button>
+          </div>
+          {cart.length === 0 ? (
+            <p className="text-gray-500">Your cart is empty.</p>
+          ) : (
+            <div className="flex flex-col gap-4">
+              {cart.map((item) => (
+                <div key={item._id} className="border-b pb-4">
+                  <div className="flex justify-between">
+                    <h3 className="font-semibold">{item.name}</h3>
+                    <p>₹{(item.price * item.quantity).toFixed(2)}</p>
+                  </div>
+                  <div className="flex items-center gap-2 mt-2">
+                    <Button
+                      onClick={() => updateQuantity(item._id, -1)}
+                      size="sm"
+                    >
+                      -
+                    </Button>
+                    <span>{item.quantity}</span>
+                    <Button
+                      onClick={() => updateQuantity(item._id, 1)}
+                      size="sm"
+                    >
+                      +
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => removeFromCart(item._id)}
+                      size="sm"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              <div className="text-xl font-bold">
+                Total: ₹{totalPrice.toFixed(2)}
+              </div>
+              <Button className="mt-4 w-full" onClick={handlePlaceOrder}>
+                Place Order
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CustomerMenuPage;
+*/
+import React, { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { menuAPI, orderAPI } from "@/services/api";
+import { X } from "lucide-react";
+import { useParams } from "react-router-dom";
+
+const CustomerMenuPage = () => {
+  const [menuItems, setMenuItems] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [showCart, setShowCart] = useState(false);
+
+  const { tableId } = useParams();
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      const response = await menuAPI.getItems();
+      const items = response.data as Array<{
+        _id: string;
+        name: string;
+        description: string;
+        price: number;
+        category: string;
+        isAvailable: boolean;
+      }>;
+      setMenuItems(items.filter((item) => item.isAvailable));
+    };
+    fetchMenu();
+  }, []);
+
+  const addToCart = (item) => {
+    setCart((prevCart) => {
+      const existing = prevCart.find((cartItem) => cartItem._id === item._id);
+      if (existing) {
+        return prevCart.map((cartItem) =>
+          cartItem._id === item._id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem
+        );
+      }
+      return [...prevCart, { ...item, quantity: 1 }];
+    });
+  };
+
+  const removeFromCart = (id) => {
+    setCart((prevCart) => prevCart.filter((item) => item._id !== id));
+  };
+
+  const updateQuantity = (id, delta) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item._id === id
+          ? { ...item, quantity: Math.max(item.quantity + delta, 1) }
+          : item
+      )
+    );
+  };
+
+  const handlePlaceOrder = async () => {
+    if (cart.length === 0) {
+      alert("Cart is empty!");
+      return;
+    }
+
+    if (!tableId || typeof tableId !== "string") {
+      alert("Invalid or missing table ID.");
+      return;
+    }
+
+    try {
+      const orderPayload = {
+        tableId: tableId.trim(),
+        customerName: "Guest",
+        items: cart.map((item) => ({
+          menuItem: item._id,
+          quantity: item.quantity,
+          notes: "",
+        })),
+      };
+
+      console.log(
+        "Sending order payload:",
+        JSON.stringify(orderPayload, null, 2)
+      );
+
+      const response = await orderAPI.createOrder(orderPayload);
+      alert("Order placed successfully!");
+      console.log("Order Response:", response.data);
+
+      setCart([]);
+      setShowCart(false);
+    } catch (error: any) {
+      console.error("Order Error:", error.response?.data);
+      alert(
+        "Failed to place order: " +
+          (error.response?.data?.errors?.[0]?.msg ||
+            error.response?.data?.message ||
+            error.message)
       );
     }
   };
@@ -533,7 +732,7 @@ const CustomerMenuPage = () => {
               <div className="text-xl font-bold">
                 Total: ₹{totalPrice.toFixed(2)}
               </div>
-              <Button className="mt-4 w-full" onClick={placeOrder}>
+              <Button className="mt-4 w-full" onClick={handlePlaceOrder}>
                 Place Order
               </Button>
             </div>

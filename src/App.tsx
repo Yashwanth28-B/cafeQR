@@ -29,7 +29,7 @@ const App = () => (
           <Route path="/admin/menu" element={<MenuManagementPage />} />
           <Route path="/admin/orders" element={<OrdersPage />} />
           <Route path="/admin/tables" element={<TablesPage />} />
-          <Route path="/menu/:tableNumber" element={<MenuPage />} />
+          <Route path="/menu/:tableId" element={<MenuPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

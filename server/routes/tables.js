@@ -29,6 +29,18 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  try {
+    console.log("Incoming request body:", req.body);
+    const table = new Table(req.body);
+    await table.save();
+    res.status(201).json(table);
+  } catch (error) {
+    console.error("Table creation error:", error.message);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
 // Get table by QR code
 router.get("/qr/:qrCode", async (req, res) => {
   try {
@@ -43,7 +55,7 @@ router.get("/qr/:qrCode", async (req, res) => {
 });
 
 // Create table (admin only)
-router.post("/", [auth, adminAuth], async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const table = new Table(req.body);
     await table.save();
@@ -54,7 +66,7 @@ router.post("/", [auth, adminAuth], async (req, res) => {
 });
 
 // Update table (admin only)
-router.put("/:id", [auth, adminAuth], async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const table = await Table.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
