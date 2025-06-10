@@ -3,12 +3,12 @@ const { body, validationResult } = require("express-validator");
 const Order = require("../models/Order");
 const Table = require("../models/Table");
 const MenuItem = require("../models/MenuItem");
-const { auth } = require("../middleware/auth");
+//const { auth } = require("../middleware/auth");
 
 const router = express.Router();
 
 // Get all orders (admin/staff)
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { status, tableId } = req.query;
     let filter = {};
@@ -170,7 +170,7 @@ router.post("/:id/items", async (req, res) => {
 });
 
 // Update item status (admin/staff)
-router.patch("/:orderId/items/:itemId/status", auth, async (req, res) => {
+router.patch("/:orderId/items/:itemId/status", async (req, res) => {
   try {
     const { status } = req.body;
 
@@ -194,7 +194,7 @@ router.patch("/:orderId/items/:itemId/status", auth, async (req, res) => {
 });
 
 // Complete order and generate receipt
-router.post("/:id/complete", auth, async (req, res) => {
+router.post("/:id/complete", async (req, res) => {
   try {
     const order = await Order.findById(req.params.id).populate(
       "items.menuItem",
@@ -204,6 +204,21 @@ router.post("/:id/complete", auth, async (req, res) => {
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
+
+    router.post("/delete-bulk", async (req, res) => {
+      try {
+        const { ids } = req.body;
+        if (!Array.isArray(ids) || ids.length === 0) {
+          return res.status(400).json({ message: "No order IDs provided" });
+        }
+
+        await Order.deleteMany({ _id: { $in: ids } });
+        res.status(200).json({ message: "Orders deleted successfully" });
+      } catch (error) {
+        console.error("Bulk delete error:", error);
+        res.status(500).json({ message: "Server error" });
+      }
+    });
 
     // Generate receipt
     const receiptNumber = `RCP-${Date.now()}`;

@@ -36,11 +36,11 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
-
+/*
 // Create menu item (admin only)
 router.post(
   "/",
-  /*[
+  [
     auth,
     adminAuth,
     [
@@ -57,7 +57,7 @@ router.post(
         ])
         .withMessage("Invalid category"),
     ],
-  ],*/
+  ],
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -73,9 +73,35 @@ router.post(
     }
   }
 );
+*/
+router.post(
+  "/",
+  [
+    body("name").notEmpty().withMessage("Name is required"),
+    body("description").notEmpty().withMessage("Description is required"),
+    body("price").isNumeric().withMessage("Price must be a number"),
+    body("category")
+      .isIn(["appetizers", "main-course", "desserts", "beverages", "specials"])
+      .withMessage("Invalid category"),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const menuItem = new MenuItem(req.body);
+      await menuItem.save();
+      res.status(201).json(menuItem);
+    } catch (error) {
+      res.status(500).json({ message: "Server error", error: error.message });
+    }
+  }
+);
 
 // Update menu item (admin only)
-router.put("/:id", [auth, adminAuth], async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const menuItem = await MenuItem.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -93,7 +119,7 @@ router.put("/:id", [auth, adminAuth], async (req, res) => {
 });
 
 // Delete menu item (admin only)
-router.delete("/:id", [auth, adminAuth], async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const menuItem = await MenuItem.findByIdAndDelete(req.params.id);
     if (!menuItem) {

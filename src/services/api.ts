@@ -48,12 +48,14 @@ export const menuAPI = {
 };
 
 // Orders API
+// Orders API
 export const orderAPI = {
   getOrders: () => api.get("/orders"),
   getOrdersByTable: (tableId: string) => api.get(`/orders/table/${tableId}`),
   createOrder: (order: any) => api.post("/orders", order),
   updateOrder: (id: string, updates: any) => api.put(`/orders/${id}`, updates),
   deleteOrder: (id: string) => api.delete(`/orders/${id}`),
+  deleteOrders: (ids: string[]) => api.post("/orders/delete-bulk", { ids }),
   markAsDelivered: (id: string) => api.patch(`/orders/${id}/delivered`),
 };
 

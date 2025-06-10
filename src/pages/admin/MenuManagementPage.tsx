@@ -201,15 +201,24 @@ const MenuManagementPage = () => {
               </div>
               <div>
                 <Label htmlFor="category">Category</Label>
-                <Input
+                <select
                   id="category"
                   value={newItem.category}
                   onChange={(e) =>
                     setNewItem({ ...newItem, category: e.target.value })
                   }
+                  className="w-full border rounded p-2"
                   required
-                />
+                >
+                  <option value="">Select Category</option>
+                  <option value="appetizers">Appetizers</option>
+                  <option value="main-course">Main Course</option>
+                  <option value="desserts">Desserts</option>
+                  <option value="beverages">Beverages</option>
+                  <option value="specials">Specials</option>
+                </select>
               </div>
+
               <div className="col-span-2">
                 <Label htmlFor="description">Description</Label>
                 <Input
