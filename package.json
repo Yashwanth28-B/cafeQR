@@ -81,7 +81,8 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.5.3",
-    "typescript-eslint": "^8.0.1"
+    "typescript-eslint": "^8.0.1",
+    "vite": "^5.4.1"  
   },
   "description": "A comprehensive QR code-based café management system built with the MERN stack (MongoDB, Express.js, React.js, Node.js).",
   "main": "eslint.config.js",
