@@ -7,19 +7,37 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
 node_modules/
+
+# Build output
 dist/
-.env/
-dist-ssr
+dist-ssr/
 *.local
 
-# Editor directories and files
-.vscode/*
+# Environment files
+.env
+.env.*    # in case you use multiple env files
+
+# Vercel output
+.vercel/
+
+# IDEs and editors
+.vscode/
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Optional: Coverage reports (if using Jest or Vitest)
+coverage/
